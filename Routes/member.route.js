@@ -6,7 +6,16 @@ const  membersController = require('../Controllers/membersController');
 //get
 router.get('/',  membersController.list);
 router.get('/newmembers',  membersController.newmembers);
+//get member prifile details
+router.post('/getloggedinmemberbyid',  membersController.getLoggedInMemberById);
+
 router.get('/getmemberbyid/:member_id',  membersController.getmemberbyid);
+
+//check email availablity
+router.get('/checkemail/:email',  membersController.checkemail);
+//check username availablity
+router.get('/checkusername/:username',  membersController.checkusername);
+
 
 //post
 router.post('/login',  membersController.login);

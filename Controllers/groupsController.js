@@ -59,6 +59,18 @@ controller.getchurchbyid = (request, response) => {
     return response.send(groupdetails);
   });
  };
+ //get list groups member has enrolled in 
+controller.getGroupsEnrolled =(request,response)=>{
+  let memberId = request.body.member_id;
+  let sql ='select  ch.churchgroups_id, ch.group_name, ch.created_date from churchgroups ch join members_churchgroups mcg on mcg.churchgroups_id = ch.churchgroups_id join members m on m.member_id= mcg.member_id where m.member_id = "' + memberId + '"';
+  conn.query(sql, (err, groupsenrollement) => {
+    if (err) {
+     response.json(err);
+    }
+    console.log(groupsenrollement);
+    return response.send(groupsenrollement);
+  });
+}
  controller.getchurchgroupmember=(request,response)=>{
   var churchGroupId = request.params.churchgroups_id;
 

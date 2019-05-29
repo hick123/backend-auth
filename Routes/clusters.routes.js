@@ -7,4 +7,7 @@ router.get('/getclusterbyid/:clusters_id', clustersController.getclusterbyid);
 router.get('/getclustermbers/:clusters_id', clustersController.getcluctermembers);
 
 router.post('/addmemberstocluster', clustersController.addmemberstocluster);
+
+router.post('/getclustersenrolled', clustersController.getclustersEnrolled);
+ 
 module.exports =router;

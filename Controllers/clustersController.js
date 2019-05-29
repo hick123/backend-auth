@@ -14,6 +14,18 @@ controller.createcluster =(request,response)=>{
      console.log(clusters);
    });
 }
+ //get list clusters member has enrolled in 
+ controller.getclustersEnrolled =(request,response)=>{
+  let clusterId = request.body.clusters_id;
+  let sql ='select  c.clusters_id, c.cluster_name, c.created_date from clusters c join members_clusters mc on mc.clusters_id = c.clusters_id join members m on m.member_id= mc.member_id where m.member_id = "' + clusterId + '"';
+  conn.query(sql, (err, clustersenrollement) => {
+    if (err) {
+     response.json(err);
+    }
+    console.log(clustersenrollement);
+    return response.send(clustersenrollement);
+  });
+}
 //adding members to selected groups 
 controller.addmemberstocluster =(request,response)=>{
     let clusters_id= request.body.clusters_id;
@@ -73,4 +85,16 @@ controller.getcluctermembers=(request,response)=>{
   });
 
  }
+  //get list clusters member has enrolled in 
+// controller.getGroupsEnrolled =(request,response)=>{
+//   let memberId = request.body.member_id;
+//   let sql ='select * from churchgroups ch join members_churchgroups mcg on mcg.churchgroups_id = ch.churchgroups_id join members m on m.member_id= mcg.member_id where m.member_id = "' + memberId + '"';
+//   conn.query(sql, (err, groupsenrollement) => {
+//     if (err) {
+//      response.json(err);
+//     }
+//     console.log(groupsenrollement);
+//     return response.send(groupsenrollement);
+//   });
+// }
 module.exports =controller;

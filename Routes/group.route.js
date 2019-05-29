@@ -10,5 +10,8 @@ router.get('/getchurchgroupmembers/:churchgroups_id', groupsController.getchurch
 
 router.post('/addtochurchgroup', groupsController.addtochurchgroup);
 
+router.post('/getgroupsenrolled', groupsController.getGroupsEnrolled);
+
+
 
 module.exports =router;
