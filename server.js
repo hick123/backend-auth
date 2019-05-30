@@ -28,10 +28,10 @@ app.use(express.json());
 // app.use(jwt({secret: 'todo-app-super-shared-secret'}).unless({path: ['/login']}));
 
 var conn = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database : 'ack'
+  host: "teqworthsystems.com",
+  user: "teqworth_ack",
+  password: "teqworth_ack",
+  database : 'teqworth_ack'
 });
 
 conn.connect(function(err) {
