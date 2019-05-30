@@ -16,8 +16,9 @@ controller.createcluster =(request,response)=>{
 }
  //get list clusters member has enrolled in 
  controller.getclustersEnrolled =(request,response)=>{
-  let clusterId = request.body.clusters_id;
-  let sql ='select  c.clusters_id, c.cluster_name, c.created_date from clusters c join members_clusters mc on mc.clusters_id = c.clusters_id join members m on m.member_id= mc.member_id where m.member_id = "' + clusterId + '"';
+  let memberId = request.body.member_id;
+  console.log('member_id..........fetching clusteers',memberId)
+  let sql ='select  c.clusters_id, c.cluster_name, c.created_date from clusters c join members_clusters mc on mc.clusters_id = c.clusters_id join members m on m.member_id= mc.member_id where m.member_id = "' + memberId + '"';
   conn.query(sql, (err, clustersenrollement) => {
     if (err) {
      response.json(err);

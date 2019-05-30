@@ -39,57 +39,96 @@ controller.getLoggedInMemberById= (request,response)=>{
    });
 }
 // login method
-
 controller.login =(request, response)=>{
   var username = request.body.username;
   var password = request.body.password;
   let member_id;
-  let sql='SELECT * FROM `members` WHERE username= "' + username + '" AND password= "' + password + '"';
+  let sql='SELECT * FROM `members` WHERE username= "' + username + '"';
   console.log(sql);
   console.log('',username);
   console.log('',password);
 
-if (username && password) {
-  conn.query(sql, function(error, results, fields) {
+   conn.query(sql, function(error, results, fields) {
     console.log(results);
-    if (results.length > 0) {
-     const token= jwt.sign({
-       data:results,
-      username: request.body.username,
-      password: request.body.password
-    },
-    'secret',
-     {
-       expiresIn: '2h'
-     },
-      results
-     
-     );
-      
-    //   const token = jwt.sign({data: results}, 'shhhhh', {
-    //     expiresIn: 4800 // 1 week
-    //   });
-      response.send({token});
-    //   response.json({
-    //     success: true,
-    //     token: 'JWT '+token,
-    //     member: {
-    //       member_id: results.member_id,
-    //       username: request.body.username,
-    //       email: request.body.email
-    //     }
-    // });
-    } else {
-              response.send('Incorrect Username and/or Password!');
-    }			
-    response.end();
-  });
-}
-    else {
-      response.send('Please enter Username and Password!');
-      response.end();
+    if (results[0].password) {
+      bcrypt.compare(request.body.password, results[0].password, function(err, result) {
+       console.log('>>>>>> ', password)
+       console.log('>>>>>> ', results[0].password)
+       if(result) {
+        const token= jwt.sign({
+          data:results,
+         username: request.body.username,
+         password: request.body.password
+       },
+       'secret',
+        {
+          expiresIn: '2h'
+        },
+         results
+        
+        );
+        response.send({token});
+        
+       }
+       else {
+         return response.status(400).send();
+       }
+     })
     }
+   });
+  
 };
+
+// controller.login =(request, response)=>{
+//   var username = request.body.username;
+//   var password = request.body.password;
+//   let member_id;
+//   let sql='SELECT * FROM `members` WHERE username= "' + username + '" AND password= "' + password + '"';
+//   console.log(sql);
+//   console.log('',username);
+//   console.log('',password);
+
+// if (username && password) {
+//   conn.query(sql, function(error, results, fields) {
+//     console.log(results);
+//     if (results.length > 0) {
+//      const token= jwt.sign({
+//        data:results,
+//       username: request.body.username,
+//       password: request.body.password
+//     },
+//     'secret',
+//      {
+//        expiresIn: '2h'
+//      },
+//       results
+     
+//      );
+      
+//     //   const token = jwt.sign({data: results}, 'shhhhh', {
+//     //     expiresIn: 4800 // 1 week
+//     //   });
+//       response.send({token});
+//     //   response.json({
+//     //     success: true,
+//     //     token: 'JWT '+token,
+//     //     member: {
+//     //       member_id: results.member_id,
+//     //       username: request.body.username,
+//     //       email: request.body.email
+//     //     }
+//     // });
+//     } else {
+//               response.send('Incorrect Username and/or Password!');
+//     }			
+//     response.end();
+//   });
+// }
+//     else {
+//       response.send('Please enter Username and Password!');
+//       response.end();
+//     }
+// };
  controller.getmemberDetails=( request,response)=>{
   jwt.verify(token, 'shhhhh', function(err, decoded) {
     console.log(decoded.foo) // bar
