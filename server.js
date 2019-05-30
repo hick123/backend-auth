@@ -14,12 +14,8 @@ const groupRoutes = require('./Routes/group.route');
 const clustersRoutes = require('./Routes/clusters.routes');
 const eventsRoutes = require('./Routes/events.routes');
 
-app.use(cors(
-  {
-    origin: 'localhost:4200'
 
-  }
-));
+app.use(cors());
 app.use(session({
 	secret: 'secret',
 	resave: true,

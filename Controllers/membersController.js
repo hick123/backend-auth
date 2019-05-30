@@ -212,35 +212,54 @@ conn.beginTransaction(function(err) {
         console.log(results);
 
 //another insert here
-        //   ministry.forEach(function(element,i){
-        //     let sql ="INSERT INTO `members_ministry` ( members_ministry_id, ministry_id, member_id) VALUES ( '"+ members_ministry_id +"' ,'" + element + "','" + member_id + "')";
-        //   conn.query( sql,(err, members_ministry) => {
-        //   if (err) {
-        //     console.log('occured during members_ministry insertion',err);
-        //     response.json(err);
-        //   }
-        //   console.log('member inserted into members_ministry successfully');
-        //   response.send('member inserted into members_ministry successfully');
-        //   console.log(members_ministry);
-        // });
-        //   });
-          
-          var ministry=request.body.ministryId.selectedministryIds;
-          var arrayLength = ministry.length;
-          for (var i = 0; i < arrayLength; i++) {
-              console.log(ministry[i]);
-              let sql ="INSERT INTO `members_ministry` ( members_ministry_id, ministry_id, member_id) VALUES ( '"+ members_ministry_id +"' ,'" + ministry[i] + "','" + member_id + "')";
-              conn.query( sql,(err, members_ministry) => {
-              if (err) {
-                console.log('occured during members_ministry insertion',err);
-                response.json(err);
-              }
-              console.log('member inserted into members_ministry successfully');
-              // response.send('member inserted into members_ministry successfully');
-              console.log(members_ministry);
-            });
-              //Do something
+          ministry.forEach(function(element,i){
+            let sql ="INSERT INTO `members_ministry` ( members_ministry_id, ministry_id, member_id) VALUES ( uuid() ,'" + element + "','" + member_id + "')";
+          conn.query( sql,(err, members_ministry) => {
+          if (err) {
+            console.log('occured during members_ministry insertion',err);
+            response.json(err);
           }
+          console.log('member inserted into members_ministry successfully');
+          response.send('member inserted into members_ministry successfully');
+          console.log(members_ministry);
+        });
+          });
+        // function ministr(member_id, ministry) {
+        //     if (ministry.length>0){
+        //       for (let i = 0; i < ministry.length; i++) {
+        //         let sql ="INSERT INTO `members_ministry` ( members_ministry_id, ministry_id, member_id) VALUES ( '"+ members_ministry_id +"' ,'" + element + "','" + member_id + "')";
+        //           conn.query( sql,(err, members_ministry) => {
+        //           if (err) {
+        //             console.log('occured during members_ministry insertion',err);
+        //             response.json(err);
+        //           }
+        //           console.log('member inserted into members_ministry successfully');
+        //           response.send('member inserted into members_ministry successfully');
+        //           console.log(members_ministry);
+        //         });               
+        //       }
+
+        //     }
+        
+        // }
+        
+          
+          // var ministry=request.body.ministryId.selectedministryIds;
+          // var arrayLength = ministry.length;
+          // for (var i = 0; i < arrayLength; i++) {
+          //     console.log(ministry[i]);
+          //     let sql ="INSERT INTO `members_ministry` ( members_ministry_id, ministry_id, member_id) VALUES ( '"+ members_ministry_id +"' ,'" + ministry[i] + "','" + member_id + "')";
+          //     conn.query( sql,(err, members_ministry) => {
+          //     if (err) {
+          //       console.log('occured during members_ministry insertion',err);
+          //       response.json(err);
+          //     }
+          //     console.log('member inserted into members_ministry successfully');
+          //     // response.send('member inserted into members_ministry successfully');
+          //     console.log(members_ministry);
+          //   });
+          //     //Do something
+          // }
 
 
         conn.commit(function(err) {
