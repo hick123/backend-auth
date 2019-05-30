@@ -45,4 +45,8 @@ conn.connect(function(err) {
   app.use('/clusters', clustersRoutes);
   app.use('/events', eventsRoutes);
 
-app.listen(port, () => console.log(`Auth app listening on port ${port}!`))
+// app.listen(port, () => console.log(`Auth app listening on port ${port}!`))
+const port = process.env.NODE_ENV === 'production' ? (process.env.PORT || 80) : 4000;
+const server = app.listen(port, function () {
+    console.log('Server listening on port ' + port);
+});
