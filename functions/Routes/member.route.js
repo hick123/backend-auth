@@ -1,11 +1,13 @@
 const router = require('../node_modules/express').Router();
 
 const  membersController = require('../Controllers/membersController');
+const authMiddleware = require('./Middlewares/auth');
+
 
 //member routes
 //get
 router.get('/',  membersController.list);
-router.get('/newmembers',  membersController.newmembers);
+router.get('/newmembers', membersController.newmembers);
 //get member prifile details
 router.post('/getloggedinmemberbyid',  membersController.getLoggedInMemberById);
 
@@ -20,8 +22,7 @@ router.get('/checkusername/:username',  membersController.checkusername);
 router.post('/activatemember',  membersController.activateMember);
 
 
-//update profile 
-router.post('/updateprofile', membersController.editprofile)
+
 
 //post
 router.post('/login',  membersController.login);

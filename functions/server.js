@@ -1,4 +1,3 @@
-// const functions = require('firebase-functions');
 var mysql = require('mysql');
 const express = require('express');
 var session = require('express-session');
@@ -10,13 +9,10 @@ var cors = require('cors');
 const app = express();
 const port = 3000;
 
-const authRoutes = require('./Routes/auth.routes');
 const memberRoutes = require('./Routes/member.route');
 const groupRoutes = require('./Routes/group.route');
 const clustersRoutes = require('./Routes/clusters.routes');
 const eventsRoutes = require('./Routes/events.routes');
-
-const authMiddleware = require('./Middlewares/auth');
 
 
 app.use(cors());
@@ -50,9 +46,8 @@ conn.connect(function(err) {
   });
   global.conn = conn;
   //routes
-  app.use('/auth',authRoutes)
-  app.use('/members', memberRoutes);
-  app.use('/groups',groupRoutes);
+  app.use('/', memberRoutes);
+  app.use('/groups', groupRoutes);
   app.use('/clusters', clustersRoutes);
   app.use('/events', eventsRoutes);
 
@@ -61,4 +56,3 @@ app.listen(port, () => console.log(`Auth app listening on port ${port}!`))
 // const server = app.listen(port, function () {
 //     console.log('Server listening on port ' + port);
 // });
-// exports.app = functions.https.onRequest(app);
