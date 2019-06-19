@@ -10,7 +10,10 @@ router.get('/getchurchgroupmembers/:churchgroups_id', groupsController.getchurch
 
 router.post('/addtochurchgroup', groupsController.addtochurchgroup);
 
-router.post('/getgroupsenrolled', groupsController.getGroupsEnrolled);
+//unenroll member from group
+router.get('/unenrolledfromgroup/:member_id', groupsController.unEnrolledFromGroup)
+
+router.get('/getgroupsenrolled/:member_id', groupsController.getGroupsEnrolled);
 
 
 

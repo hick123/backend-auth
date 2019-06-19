@@ -67,7 +67,7 @@ controller.createevent =( request,response)=>{
     let event_title =request.body.eventForm.event_title;
     console.log(event_title);
     let event_description = request.body.eventForm.event_description;
-    let  start_date =  request.body.eventForm.event_description;
+    let  start_date =  request.body.eventForm.start_date;
     let end_date = request.body.eventForm.end_date;
     let created_by = request.body.eventForm.created_by;
     let active =request.body.active.active;
@@ -159,5 +159,36 @@ controller.getAllEvents=(request,response)=>{
     console.log('All events',events);
     return response.send(events);
   })
-}
+};
+//get specific event by id 
+controller.geteventsbyid = (request, response) => {
+  let churchevents_id  = request.params.churchevents_id; 
+   let sql='SELECT * FROM `churchevents` WHERE churchevents_id = "' + churchevents_id + '"';
+ 
+   conn.query(sql, (err, event) => {
+    if (err) {
+     response.json(err);
+    }
+    console.log(event);
+    return response.send(event);
+  });
+ };
+
+ controller.editEvent=(request, response)=>{
+  let event_title =request.body.eventForm.event_title;
+  let event_description = request.body.eventForm.event_description;
+  let  start_date =  request.body.eventForm.start_date;
+  let end_date = request.body.eventForm.end_date;
+   
+  let sql = 'UPDATE `churchevents` SET `event_title`="'+event_title+'", `event_description`="'+event_description+'", `start_date`="'+start_date+'", `end_date`="'+end_date+'" WHERE `churchevents_id`= "'+churchevents_id+'"';
+
+  conn.query(sql, (err, event) => {
+    if (err) {
+     response.json(err);
+    }
+    console.log(event);
+    return response.send(event);
+  });
+
+ }
 module.exports = controller;

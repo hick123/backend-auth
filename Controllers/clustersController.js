@@ -16,7 +16,7 @@ controller.createcluster =(request,response)=>{
 }
  //get list clusters member has enrolled in 
  controller.getclustersEnrolled =(request,response)=>{
-  let memberId = request.body.member_id;
+  let memberId = request.params.member_id;
   console.log('member_id..........fetching clusteers',memberId)
   let sql ='select  c.clusters_id, c.cluster_name, c.created_date from clusters c join members_clusters mc on mc.clusters_id = c.clusters_id join members m on m.member_id= mc.member_id where m.member_id = "' + memberId + '"';
   conn.query(sql, (err, clustersenrollement) => {
@@ -26,26 +26,56 @@ controller.createcluster =(request,response)=>{
     console.log(clustersenrollement);
     return response.send(clustersenrollement);
   });
-}
-//adding members to selected groups 
+};
+
+//adding members to selected clusters 
 controller.addmemberstocluster =(request,response)=>{
-    let clusters_id= request.body.clusters_id;
-    let member_id= request.body.member_id;
-    let is_admin= request.body.is_admin;
+  console.log(request.body,'.............................adding')
+
+    let clusters_id= request.body.clusters_id.clusters_id;
+    let member_id= request.body.form.member_id;
+    let is_admin= request.body.form.is_admin;
     let members_clusters_id =uuidv4();
-  
+ console.log(request.body,'.............................adding')
     console.log('inserting member to cluster');
+
+
+    let sql="SELECT * FROM `members_clusters` WHERE member_id='"+ member_id + "'";
+    conn.query(sql, (err,results)=>{
+      if(err){
+        response.json(err);
+      }
+       if(results.length>0){
+         return response.send('Member enrolled to a cluster unrell first');
+       }else{
+        let sql ="INSERT INTO `members_clusters` (members_clusters_id, member_id, clusters_id, is_admin) VALUES ( '" + members_clusters_id  + "','" + member_id + "','" + clusters_id + "','" + is_admin + "')";
+        conn.query( sql,(err, members_clusters) => {
+              if (err) {
+              console.log('occured during adding member to cluster',err);
+              response.json(err);
+              }
+              response.send('Added member to cluster successfully');
+              console.log(members_clusters);
+      });
+       }
+    });
+};
+  //unenroll member from group
+controller.unEnrolledFromCluster=(request,response)=>{
+  let member_id = request.params.member_id;
+  console.log('removing ......', request.body, member_id)
   
-    let sql ="INSERT INTO `members_clusters` (members_clusters_id, member_id, clusters_id, is_admin) VALUES ( '" + members_clusters_id  + "','" + member_id + "','" + clusters_id + "','" + is_admin + "')";
-     conn.query( sql,(err, members_clusters) => {
-     if (err) {
-      console.log('occured during adding member to cluster',err);
-      response.json(err);
-     }
-     response.send('Added member to cluster successfully');
-     console.log(members_clusters);
-   });
-  }
+  let sql= 'delete mc from members_clusters mc left join members m on m.member_id = mc.member_id where m.member_id = "' + member_id + '"';
+  conn.query(sql, (err, churchgroups) => {
+    if (err) {
+      console.log('error here',err);
+     response.json(err);
+    }
+    console.log(churchgroups);
+    return response.send(churchgroups);
+  });
+
+};
 
 controller.getclusters= (request, response) => {
     conn.query('SELECT * FROM clusters', (err, clusters) => {

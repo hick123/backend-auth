@@ -6,8 +6,11 @@ const  membersController = require('../Controllers/membersController');
 //get
 router.get('/',  membersController.list);
 router.get('/newmembers',  membersController.newmembers);
-//get member prifile details
+//get member prifole details
 router.post('/getloggedinmemberbyid',  membersController.getLoggedInMemberById);
+
+//get member //get member ministries details
+router.post('/getloggedinmemberbyidministry',  membersController.getLoggedInMemberByIdMinistries);
 
 router.get('/getmemberbyid/:member_id',  membersController.getmemberbyid);
 
@@ -16,12 +19,17 @@ router.get('/checkemail/:email',  membersController.checkemail);
 //check username availablity
 router.get('/checkusername/:username',  membersController.checkusername);
 
+//check username availablity
+router.get('/searchmember/:username',  membersController.searchmember);
+
 //activate member
 router.post('/activatemember',  membersController.activateMember);
 
 
 //update profile 
 router.post('/updateprofile', membersController.editprofile)
+
+
 
 //post
 router.post('/login',  membersController.login);

@@ -15,33 +15,72 @@ controller.login =(request, response)=>{
     console.log(sql);
     console.log('',username);
     console.log('',password);
-  
-     conn.query(sql, function(error, results, fields) {
+    conn.query(sql, function(error, results, fields) {
       console.log(results);
-      if (results[0].password) {
-        bcrypt.compare(request.body.password, results[0].password, function(err, result) {
-         console.log('>>>>>> ', password)
-         console.log('>>>>>> ', results[0].password)
-         if(result) {
-          const token= jwt.sign({
-            data:results,
-           username: request.body.username,
-           password: request.body.password
-         },
-         'secret',
-          {
-            expiresIn: '1hr'
-          }          
-          );
-          response.send({token});
-          
-         }
-         else {
-           return response.status(400).send();
-         }
-       })
+      if (results.length > 0){
+        console.log('entered if stat..');
+        if (results[0].password) {
+          bcrypt.compare(request.body.password, results[0].password, function(err, result) {
+           console.log('>>>>>> ', password)
+           console.log('>>>>>> ', results[0].password)
+           if(result) {
+            const token= jwt.sign({
+              data:results,
+             username: request.body.username,
+             password: request.body.password
+           },
+           'secret',
+            {
+              expiresIn: '2h'
+            },
+             results
+            
+            );
+            response.send({token});
+            
+           }
+           else {
+             return response.status(400).send();
+           }
+         })
+        }
+  
       }
+      else {
+        return response.status(400).send();
+      }
+     
      });
+  
+    //  conn.query(sql, function(error, results, fields) {
+    //   if(error){
+    //     response.json(error);
+    //   }
+    //   console.log(results);
+    //   if (results[0].password) {
+    //     bcrypt.compare(request.body.password, results[0].password, function(err, result) {
+    //      console.log('>>>>>> ', password)
+    //      console.log('>>>>>> ', results[0].password)
+    //      if(result) {
+    //       const token= jwt.sign({
+    //         data:results,
+    //        username: request.body.username,
+    //        password: request.body.password
+    //      },
+    //      'secret',
+    //       {
+    //         expiresIn: '1hr'
+    //       }          
+    //       );
+    //       response.send({token});
+          
+    //      }
+    //      else {
+    //        return response.status(400).send();
+    //      }
+    //    })
+    //   }
+    //  });
     
   };
   // registration

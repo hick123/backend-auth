@@ -29,6 +29,7 @@ controller.newmembers = (request, response) => {
 controller.getLoggedInMemberById= (request,response)=>{
   let memberId= request.body.member_id;
   console.log(memberId);
+  // let sql='select * from members m inner join members_ministry mm on mm.member_id= m.member_id inner join ministry ms on ms.ministry_id = mm.ministry_id where m.member_id="' + memberId + '"';
   let sql='SELECT * FROM `members` WHERE member_id=  "' + memberId + '"';
    conn.query(sql, (err,results)=>{
      if(err){
@@ -37,44 +38,71 @@ controller.getLoggedInMemberById= (request,response)=>{
      console.log(results)
      response.send(results);
    });
+
+}
+//get member ministries
+controller.getLoggedInMemberByIdMinistries= (request,response)=>{
+  let memberId= request.body.member_id;
+  console.log(memberId);
+  // let sql='select * from members m inner join members_ministry mm on mm.member_id= m.member_id inner join ministry ms on ms.ministry_id = mm.ministry_id where m.member_id="' + memberId + '"';
+  let sql='select ministry_name from  ministry ms inner join members_ministry mm on mm.ministry_id = ms.ministry_id inner join members m on m.member_id = mm.member_id where m.member_id= "' + memberId + '"';
+   conn.query(sql, (err,results)=>{
+     if(err){
+       response.json(err);
+     }
+     console.log(results)
+     response.send(results);
+   });
+   
 }
 // login method
 controller.login =(request, response)=>{
   var username = request.body.username;
   var password = request.body.password;
+  console.log('',username);
+  console.log('',password)
+
   let member_id;
   let sql='SELECT * FROM `members` WHERE username= "' + username + '"';
   console.log(sql);
   console.log('',username);
-  console.log('',password);
+  // console.log('',password);
 
    conn.query(sql, function(error, results, fields) {
     console.log(results);
-    if (results[0].password) {
-      bcrypt.compare(request.body.password, results[0].password, function(err, result) {
-       console.log('>>>>>> ', password)
-       console.log('>>>>>> ', results[0].password)
-       if(result) {
-        const token= jwt.sign({
-          data:results,
-         username: request.body.username,
-         password: request.body.password
-       },
-       'secret',
-        {
-          expiresIn: '2h'
-        },
-         results
-        
-        );
-        response.send({token});
-        
-       }
-       else {
-         return response.status(400).send();
-       }
-     })
+    if (!results.length){
+      console.log('entered if stat..');
+      if (results[0].password) {
+        bcrypt.compare(request.body.password, results[0].password, function(err, result) {
+         console.log('>>>>>> ', password)
+         console.log('>>>>>> ', results[0].password)
+         if(result) {
+          const token= jwt.sign({
+            data:results,
+           username: request.body.username,
+           password: request.body.password
+         },
+         'secret',
+          {
+            expiresIn: '2h'
+          },
+           results
+          
+          );
+          response.send({token});
+          
+         }
+         else {
+           return response.status(400).send();
+         }
+       })
+      }
+
     }
+    else {
+      return response.status(400).send();
+    }
+   
    });
   
 };
@@ -96,6 +124,7 @@ controller.login =(request, response)=>{
   });
    
  }
+
  //check username if it exists
  controller.checkusername=(request,response)=>{
       let username=request.params.username;
@@ -112,6 +141,22 @@ controller.login =(request, response)=>{
       return response.send(username);
     });   
    
+}
+controller.searchmember=(request,response)=>{
+  let username=request.params.username;
+  console.log('username checking....', username)
+
+  var sql='SELECT * FROM `members` WHERE username = "' + username + '"';
+
+
+  conn.query(sql, (err, results) => {
+  if (err) {
+    response.json(err);
+  }
+  console.log(results);
+  return response.send(results);
+});   
+
 }
 // registration
 controller.signup =(request, response) => {
@@ -178,7 +223,7 @@ conn.beginTransaction(function(err) {
           }
           console.log(results);
           console.log('success!');
-          return response.send(results);
+          return response.sendStatus(200).send('ok')
         });
         
       })
@@ -245,20 +290,20 @@ controller.editprofile=(request,response)=>{
               throw error;
             });
           }
-          console.log(results);
-         ministry.forEach(function(element){
-              var members_ministry_id=uuidv4();
-              let sql ="INSERT INTO `members_ministry` ( members_ministry_id, ministry_id, member_id) VALUES ( '" + members_ministry_id + "','" + element + "','" + member_id + "')";
-            conn.query( sql,(err, members_ministry) => {
-            if (err) {
-              console.log('occured during members_ministry update',err);
-              response.json(err);
-            }
-            // next();
-            console.log('member updated into members_ministry successfully');
-            console.log(members_ministry);
-          });
-            });
+        //   console.log(results);
+        //  ministry.forEach(function(element){
+        //       var members_ministry_id=uuidv4();
+        //       let sql ="INSERT INTO `members_ministry` ( members_ministry_id, ministry_id, member_id) VALUES ( '" + members_ministry_id + "','" + element + "','" + member_id + "')";
+        //     conn.query( sql,(err, members_ministry) => {
+        //     if (err) {
+        //       console.log('occured during members_ministry update',err);
+        //       response.json(err);
+        //     }
+        //     // next();
+        //     console.log('member updated into members_ministry successfully');
+        //     console.log(members_ministry);
+        //   });
+        //     });
           conn.commit(function(err) {
             if (err) {
               return conn.rollback(function() {
@@ -277,15 +322,30 @@ controller.activateMember=(request, response)=>{
   let member_number =request.body.member_number;
   let active =1;
   let member_id =request.body.member_id;
-  let sql = 'UPDATE `members` SET `member_number`="'+member_number+'", `active`="'+active+'" WHERE `member_id`= "'+member_id+'"';
+  
+  let sql="SELECT * FROM `members` WHERE member_number='"+ member_number + "'";
+
+  conn.query(sql, (err, results)=>{
+    // Object.keys(req.query).length === 0
+
+    if(err){
+      response.json(err);
+    }
+    console.log(results);
+    if(results.length>0){
+      return response.send('Member number already taken');      
+    }else{
+      let sql = 'UPDATE `members` SET `member_number`="'+ member_number +'", `active`="'+active+'" WHERE `member_id`= "'+member_id+'"';
         conn.query(sql, (err, results) => {
           if (err) {
           response.json(err);
           }
           console.log(results);
           return response.send(results);
+      });
+    }
   });
- };
+};
 
 controller.update = (req, res) => {
   const { id } = req.params;
