@@ -6,6 +6,7 @@ var jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
+
 // login method
 controller.login =(request, response)=>{
     var username = request.body.username;
@@ -197,4 +198,40 @@ controller.signup =(request, response) => {
   
   
   };
+  
+ //check email if it exists
+ controller.checkemail=(request,response)=>{
+  let email=request.params.email;
+  console.log('email checking', email)
+
+  var sql='SELECT * FROM `members` WHERE email = "' + email + '"';
+
+
+  conn.query(sql, (err, email) => {
+   if (err) {
+    response.json(err);
+   }
+   console.log(email);
+   return response.send(email);
+ });
+  
+}
+ //check username if it exists
+ controller.checkusername=(request,response)=>{
+  let username=request.params.username;
+  console.log('username checking....', username)
+
+  var sql='SELECT * FROM `members` WHERE username = "' + username + '"';
+
+
+  conn.query(sql, (err, username) => {
+  if (err) {
+    response.json(err);
+  }
+  console.log(username);
+  return response.send(username);
+});   
+
+}
+
   module.exports = controller;

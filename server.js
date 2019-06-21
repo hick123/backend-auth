@@ -28,8 +28,8 @@ app.use(session({
 app.use(bodyParser.urlencoded({extended : true}));
 // app.use(bodyParser.json());
 app.use(express.json());
-// app.use(jwt);
-// app.use(jwt({secret: 'todo-app-super-shared-secret'}).unless({path: ['/login']}));
+app.use(jwt);
+app.use(jwt({secret: 'todo-app-super-shared-secret'}).unless({path: ['/login']}));
 var conn = mysql.createConnection({
   host: "remotemysql.com",
   user: "EDNJyikTgf",
