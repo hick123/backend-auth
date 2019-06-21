@@ -30,13 +30,19 @@ app.use(bodyParser.urlencoded({extended : true}));
 app.use(express.json());
 // app.use(jwt);
 // app.use(jwt({secret: 'todo-app-super-shared-secret'}).unless({path: ['/login']}));
-
 var conn = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database : 'ack'
+  host: "remotemysql.com",
+  user: "EDNJyikTgf",
+  password: "2kNR45e4Zq",
+  database : 'EDNJyikTgf'
 });
+
+// var conn = mysql.createConnection({
+//   host: "localhost",
+//   user: "root",
+//   password: "",
+//   database : 'ack'
+// });
 // var conn = mysql.createConnection({
 //   host: "teqworthsystems.com",
 //   user: "teqworth_ack",
