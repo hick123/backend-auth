@@ -25,6 +25,9 @@ router.get('/searchmember/:username',  membersController.searchmember);
 //activate member
 router.post('/activatemember',  membersController.activateMember);
 
+//update member details
+router.post('/updateprofile',  membersController.editprofile);
+
 
 //update profile 
 router.post('/updateprofile', membersController.editprofile)

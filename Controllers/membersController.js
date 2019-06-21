@@ -264,23 +264,26 @@ console.log(memberId);
 //update profile for  members
 controller.editprofile=(request,response)=>{
     console.log(request.body);
-     var ministry=request.body.ministryId.selectedministryIds;
-    var username= request.body.registerForm.username;
-    var member_id = request.body.member_id;
-    var first_name = request.body.registerForm.first_name;
-    var other_names = request.body.registerForm.other_names;
-    var email = request.body.registerForm.email;
-    var age = request.body.registerForm.age;
-    var gender = request.body.registerForm.gender;
-    var occupation = request.body.registerForm.occupation;
-    var location = request.body.registerForm.location;
-    var phone = request.body.registerForm.phone;
-    var marital_status = request.body.registerForm.marital_status;
+    //  var ministry=request.body.ministryId.selectedministryIds;
+    var username= request.body.username;
+    var member_id = request.body.member_id.member_id;
+    var first_name = request.body.editForm.first_name;
+    var other_names = request.body.editForm.other_names;
+    var email = request.body.email;
+    var age = request.body.editForm.age;
+    // var gender = request.body.editForm.gender;
+    var occupation = request.body.editForm.occupation;
+    var location = request.body.editForm.location;
+    // var occupation = request.body.occupation;
+    var phone = request.body.editForm.phone;
+    var marital_status = request.body.editForm.marital_status;
+    console.log(member_id);
 
-      console.log(ministry);
+
+      // console.log(ministry);
   conn.beginTransaction(function(err) {
     
-    let sql ="UPDATE `members` SET `username`= '" + username + "', `username` ='" + username + "',  first_name= '" + first_name + "', `other_names` = '" + other_names + "', `email`= '" + email + "', `phone`='" + phone + "',`gender`= '" + gender + "', `occupation`='" + occupation + "' , `location`='" + location + "',`marital_status`='" + marital_status + "', `age`='" + age + "' WHERE `member_id` = '" + member_id + "'";
+    let sql ="UPDATE `members` SET  first_name= '" + first_name + "', `other_names` = '" + other_names + "', `phone`='" + phone + "', `occupation`='" + occupation + "' , `location`='" + location + "',`marital_status`='" + marital_status + "', `age`='" + age + "' WHERE `member_id` = '" + member_id + "'";
         console.log(sql);
         conn.query(sql, (err,results)=>{
           if(err){
