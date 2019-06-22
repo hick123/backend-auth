@@ -11,9 +11,9 @@ controller.createGroup =(request,response)=>{
       console.log('occured during group creation',err);
       response.json(err);
      }
-     res.status(200).end();
+     res.json(churchgroups);
     //  response.send('Group created successfully');
-     console.log(churchgroups);
+    //  console.log(churchgroups);
    });
 }
 
