@@ -14,6 +14,8 @@ controller.createclusterevent =( request,response)=>{
     let end_date = request.body.eventForm.end_date;
     let created_by = request.body.eventForm.created_by;
     let active =request.body.active.active;
+    // let active =request.body.active.active;
+
     console.log('activeeee......',active);
 
     //churchevents_transanctions

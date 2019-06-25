@@ -4,8 +4,10 @@ const uuidv4 = require('uuid/v4');
 controller.createGroup =(request,response)=>{
     let churchGroupId = uuidv4();
     let group_name= request.body.group_name;
+    let created_by='admin';
 
-    let sql ="INSERT INTO `churchgroups` ( churchgroups_id, group_name) VALUES ( '"+ churchGroupId +"' ,'" + group_name + "')";
+
+    let sql ="INSERT INTO `churchgroups` ( churchgroups_id, group_name,created_by) VALUES ( '"+ churchGroupId +"' ,'" + group_name + "',,'" + created_by + "')";
      conn.query( sql,(err, churchgroups) => {
      if (err) {
       console.log('occured during group creation',err);
@@ -23,6 +25,7 @@ controller.addtochurchgroup =(request,response)=>{
   let churchgroups_id= request.body.churchgroups_id.churchgroups_id;
   let member_id= request.body.form.member_id;
   let is_admin= request.body.form.is_admin;
+  let created_by='admin';
 
   console.log('inserting member to group');
   let sqlselect ="SELECT * FROM `members_churchgroups` WHERE member_id ='"+ member_id+"'";
@@ -39,14 +42,14 @@ controller.addtochurchgroup =(request,response)=>{
       if(results.length>0){
         return response.send('Member enrolled to a group unrell first');
       }else{
-        let sql ="INSERT INTO `members_churchgroups` (members_churchgroups_id, member_id, churchgroups_id, is_admin) VALUES ( '"+ members_churchgroups_id +"','" + member_id + "','" + churchgroups_id + "','" + is_admin + "')";
+        let sql ="INSERT INTO `members_churchgroups` (members_churchgroups_id, member_id, churchgroups_id, is_admin,created_by) VALUES ( '"+ members_churchgroups_id +"','" + member_id + "','" + churchgroups_id + "','" + is_admin + "','" + created_by + "')";
         conn.query( sql,(err, members_churchgroups) => {
   
         if (err) {
          console.log('occured during group creation',err);
          response.json(err);
         }
-        response.send('Add to groups successfully');
+        response.send(results);
        //  console.log(members_churchgroups);
       });
       }

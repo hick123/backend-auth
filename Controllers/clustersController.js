@@ -3,8 +3,9 @@ const controller ={};
 controller.createcluster =(request,response)=>{
     let clusters_id= uuidv4();
     let cluster_name= request.body.cluster_name;
+    let created_by='admin';
 
-    let sql ="INSERT INTO `clusters` ( clusters_id, cluster_name) VALUES ( '" + clusters_id + "' ,'" + cluster_name + "')";
+    let sql ="INSERT INTO `clusters` ( clusters_id, cluster_name) VALUES ( '" + clusters_id + "' ,'" + cluster_name + "','" + created_by + "')";
      conn.query( sql,(err, clusters) => {
      if (err) {
       console.log('occured during cluster creation',err);

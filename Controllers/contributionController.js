@@ -45,15 +45,15 @@ controller.allContributions=(request,response)=>{
   });
 };
 //gets members contributions (sums)
-controller.groupedContributions=(request,response)=>{
-  let sql='SELECT m.username,m.member_number, m.first_name, m.other_names, c.Contribution_description, c.contribution_date,sum(amount) FROM contribution c inner join members m on c.member_id = m.member_id group by m.member_id;'
-  conn.query(sql, (err,results)=>{
-    if(err){
-      response.json(err);
-    }
-    return response.send(results);
-  });
-};
+// controller.groupedContributions=(request,response)=>{
+//   let sql='SELECT m.username,m.member_number, m.first_name, m.other_names, c.Contribution_description, c.contribution_date,sum(amount) FROM contribution c inner join members m on c.member_id = m.member_id group by m.member_id;'
+//   conn.query(sql, (err,results)=>{
+//     if(err){
+//       response.json(err);
+//     }
+//     return response.send(results);
+//   });
+// };
 //get members contributions in there respective groups
 controller.contributionWithGroups=(request,response)=>{
   let sql ='SELECT m.username, m.member_number, m.first_name, m.other_names, c.amount,c.Contribution_description,c.contribution_date,cg.group_name,cg.churchgroups_id FROM contribution c INNER JOIN members m ON c.member_id = m.member_id INNER JOIN members_churchgroups mc ON mc.member_id= m.member_id INNER JOIN churchgroups cg ON cg.churchgroups_id= mc.churchgroups_id';

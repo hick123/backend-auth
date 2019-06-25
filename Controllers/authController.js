@@ -16,7 +16,7 @@ controller.login =(request, response)=>{
     console.log(sql);
     console.log('',username);
     console.log('',password);
-    conn.query(sql, function(error, results, fields) {
+    conn.query(sql, function(err, results, fields) {
       console.log(results);
       if (results.length > 0){
         console.log('entered if stat..');
@@ -53,9 +53,9 @@ controller.login =(request, response)=>{
      
      });
   
-    //  conn.query(sql, function(error, results, fields) {
-    //   if(error){
-    //     response.json(error);
+    //  conn.query(sql, function(er, results, fields) {
+    //   if(err){
+    //     response.json(err);
     //   }
     //   console.log(results);
     //   if (results[0].password) {
@@ -102,6 +102,7 @@ controller.signup =(request, response) => {
     var phone = request.body.registerForm.phone;
     var marital_status = request.body.registerForm.marital_status;
     var members_ministry_id=uuidv4();
+    var created_by= 'user';
   
     ministry.forEach((item,member_id) => {
           member_id
@@ -111,17 +112,17 @@ controller.signup =(request, response) => {
     bcrypt.genSalt(saltRounds, function(err, salt) {
       bcrypt.hash(password, salt, function(err, hash) {
   
-        let sql ="INSERT INTO `members` ( member_id, username, password, first_name, other_names, email,phone,gender, occupation, location,marital_status, age) VALUES ('" + member_id + "','" +
+        let sql ="INSERT INTO `members` ( member_id, username, password, first_name, other_names, email,phone,gender, occupation, location,marital_status, age, created_by) VALUES ('" + member_id + "','" +
         username + "', '" + hash + "', '" + first_name + "', '" + other_names + "', '"  + 
         email + "','" + phone + "', '" + gender + "', '" + occupation + "', '" + location + "','" + marital_status + "','" + 
-        age + "')";
+        age + "', '" + created_by + "')";
         console.log(sql);
         conn.query(sql, (err,results)=>{
           if(err){
             response.send(err)
-            console.log('could not insert details to members',error);
+            // console.log('could not insert details to members',err);
               return conn.rollback(function() {
-              throw error;
+              throw err;
             });
           }
           console.log(results);

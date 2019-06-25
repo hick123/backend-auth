@@ -9,7 +9,7 @@ router.post('/addcontribution', contributionController.addContribution);
 router.get('/allContributions', contributionController.allContributions);
 
 
-router.get('/groupcontributions', contributionController.groupedContributions);
+// router.get('/groupcontributions', contributionController.groupedContributions);
 
 //get members contributions in there respective groups
 router.get('/contributionwithgroups', contributionController.contributionWithGroups);
