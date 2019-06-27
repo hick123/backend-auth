@@ -12,10 +12,12 @@ controller.login =(request, response)=>{
     var username = request.body.username;
     var password = request.body.password;
     let member_id;
-    let sql='SELECT * FROM `members` WHERE username= "' + username + '"';
+    let sql="SELECT * FROM `members` WHERE username= '" + username + "' OR email = '" + username + "'";
     console.log(sql);
     console.log('',username);
     console.log('',password);
+    // console.log('',results);
+
     conn.query(sql, function(err, results, fields) {
       console.log(results);
       if (results.length > 0){
@@ -50,39 +52,7 @@ controller.login =(request, response)=>{
       else {
         return response.status(400).send();
       }
-     
-     });
-  
-    //  conn.query(sql, function(er, results, fields) {
-    //   if(err){
-    //     response.json(err);
-    //   }
-    //   console.log(results);
-    //   if (results[0].password) {
-    //     bcrypt.compare(request.body.password, results[0].password, function(err, result) {
-    //      console.log('>>>>>> ', password)
-    //      console.log('>>>>>> ', results[0].password)
-    //      if(result) {
-    //       const token= jwt.sign({
-    //         data:results,
-    //        username: request.body.username,
-    //        password: request.body.password
-    //      },
-    //      'secret',
-    //       {
-    //         expiresIn: '1hr'
-    //       }          
-    //       );
-    //       response.send({token});
-          
-    //      }
-    //      else {
-    //        return response.status(400).send();
-    //      }
-    //    })
-    //   }
-    //  });
-    
+     }); 
   };
   // registration
 controller.signup =(request, response) => {
@@ -142,44 +112,6 @@ controller.signup =(request, response) => {
             console.log(members_ministry);
           });
             });
-          // function ministr(member_id, ministry) {
-          //     if (ministry.length>0){
-          //       for (let i = 0; i < ministry.length; i++) {
-          //         let sql ="INSERT INTO `members_ministry` ( members_ministry_id, ministry_id, member_id) VALUES ( uuid(),'" + ministry[i] + "','" + member_id + "')";
-          //           conn.query( sql,(err, members_ministry) => {
-          //           if (err) {
-          //             console.log('occured during members_ministry insertion',err);
-          //             response.json(err);
-          //           }
-          //           console.log('member inserted into members_ministry successfully');
-          //           response.send('member inserted into members_ministry successfully');
-          //           console.log(members_ministry);
-          //         });               
-          //       }
-  
-          //     }
-          
-          // }
-          
-            
-            // var ministry=request.body.ministryId.selectedministryIds;
-            // var arrayLength = ministry.length;
-            // for (var i = 0; i < arrayLength; i++) {
-            //     console.log(ministry[i]);
-            //     let sql ="INSERT INTO `members_ministry` ( members_ministry_id, ministry_id, member_id) VALUES ( '"+ members_ministry_id +"' ,'" + ministry[i] + "','" + member_id + "')";
-            //     conn.query( sql,(err, members_ministry) => {
-            //     if (err) {
-            //       console.log('occured during members_ministry insertion',err);
-            //       response.json(err);
-            //     }
-            //     console.log('member inserted into members_ministry successfully');
-            //     // response.send('member inserted into members_ministry successfully');
-            //     console.log(members_ministry);
-            //   });
-            //     //Do something
-            // }
-  
-  
           conn.commit(function(err) {
             if (err) {
               return conn.rollback(function() {
