@@ -36,6 +36,7 @@ controller.addmemberstocluster =(request,response)=>{
     let clusters_id= request.body.clusters_id.clusters_id;
     let member_id= request.body.form.member_id;
     let is_admin= request.body.form.is_admin;
+    let created_by='admin';
     let members_clusters_id =uuidv4();
  console.log(request.body,'.............................adding')
     console.log('inserting member to cluster');
@@ -49,7 +50,7 @@ controller.addmemberstocluster =(request,response)=>{
        if(results.length>0){
          return response.send('Member enrolled to a cluster unrell first');
        }else{
-        let sql ="INSERT INTO `members_clusters` (members_clusters_id, member_id, clusters_id, is_admin) VALUES ( '" + members_clusters_id  + "','" + member_id + "','" + clusters_id + "','" + is_admin + "')";
+        let sql ="INSERT INTO `members_clusters` (members_clusters_id, member_id, clusters_id, is_admin, created_by) VALUES ( '" + members_clusters_id  + "','" + member_id + "','" + clusters_id + "','" + is_admin + "','" + created_by + "')";
         conn.query( sql,(err, members_clusters) => {
               if (err) {
               console.log('occured during adding member to cluster',err);
