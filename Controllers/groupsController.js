@@ -27,20 +27,23 @@ controller.addtochurchgroup =(request,response)=>{
   let is_admin= request.body.form.is_admin;
   let created_by='admin';
 
+  
   console.log('inserting member to group');
   let sqlselect ="SELECT * FROM `members_churchgroups` WHERE member_id ='"+ member_id+"'";
   conn.query(sqlselect, (error, results)=>{
-    // console.log(results);
-      //    results.forEach(element => {
-      // if(element.member_id===member_id){
-      //   response.send('Member already already enrolled to this group or another');
-      // }
+      console.log('results[]',results);
       if(error){
         console.log('occured during group creation',error);
         response.json(error);
       }
       if(results.length>0){
-        return response.send('Member enrolled to a group unrell first');
+        //select the group the member is eondrolled in response back to the user
+        let churchgroups_id=results[0].churchgroups_id;
+        let sqlselect ="SELECT * FROM `churchgroups` WHERE churchgroups_id ='"+ churchgroups_id+"'";
+        conn.query(sqlselect, (error,results)=>{
+          console.log('results  sss', results);
+          response.status(409).json({ message: 'That member already enrolled to '+results[0].group_name }); 
+        });
       }else{
         let sql ="INSERT INTO `members_churchgroups` (members_churchgroups_id, member_id, churchgroups_id, is_admin,created_by) VALUES ( '"+ members_churchgroups_id +"','" + member_id + "','" + churchgroups_id + "','" + is_admin + "','" + created_by + "')";
         conn.query( sql,(err, members_churchgroups) => {
@@ -50,7 +53,6 @@ controller.addtochurchgroup =(request,response)=>{
          response.json(err);
         }
         response.send(results);
-       //  console.log(members_churchgroups);
       });
       }
     });

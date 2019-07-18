@@ -28,6 +28,7 @@ controller.newmembers = (request, response) => {
 // get user details after sign in
 controller.getLoggedInMemberById= (request,response)=>{
   let memberId= request.body.member_id;
+  // setTimeout(10000);
   console.log(memberId);
   // let sql='select * from members m inner join members_ministry mm on mm.member_id= m.member_id inner join ministry ms on ms.ministry_id = mm.ministry_id where m.member_id="' + memberId + '"';
   let sql='SELECT * FROM `members` WHERE member_id=  "' + memberId + '"';
@@ -248,6 +249,8 @@ controller.edit = (req, res) => {
 //select member by id
 controller.getmemberbyid = (request, response) => {
  let memberId = request.params.member_id;
+ setTimeout(10000);
+
 //  let memberId = "ke";
 console.log(memberId);
 

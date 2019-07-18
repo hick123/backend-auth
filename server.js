@@ -16,7 +16,7 @@ const clustersRoutes = require('./Routes/clusters.routes');
 const eventsRoutes = require('./Routes/events.routes');
 const contributionRoutes= require('./Routes/contribution.route')
 
-const authMiddleware = require('./Middlewares/auth');
+// const authMiddleware = require('./Middlewares/auth');
 
 
 app.use(cors());
@@ -30,19 +30,19 @@ app.use(bodyParser.urlencoded({extended : true}));
 app.use(express.json());
 // app.use(jwt);
 // app.use(jwt({secret: 'todo-app-super-shared-secret'}).unless({path: ['/login']}));
-var conn = mysql.createConnection({
-  host: "remotemysql.com",
-  user: "EDNJyikTgf",
-  password: "2kNR45e4Zq",
-  database : 'EDNJyikTgf'
-});
-
 // var conn = mysql.createConnection({
-//   host: "localhost",
-//   user: "root",
-//   password: "",
-//   database : 'ack'
+//   host: "remotemysql.com",
+//   user: "EDNJyikTgf",
+//   password: "2kNR45e4Zq",
+//   database : 'EDNJyikTgf'
 // });
+
+var conn = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "",
+  database : 'ack'
+});
 // var conn = mysql.createConnection({
 //   host: "teqworthsystems.com",
 //   user: "teqworth_ack",
@@ -50,11 +50,26 @@ var conn = mysql.createConnection({
 //   database : 'teqworth_ack'
 // });
 
-conn.connect(function(err) {
-  if (err) throw err;
-  console.log("Connected!");
+// conn.connect(function(err) {
+//   if (err) throw err;
+//   console.log("Connected!");
+//   });
+//   global.conn = conn;
+var connectWithRetry = async function() {
+  conn.connect(function(err) {
+  // if (err) throw err;
+  // console.log("Connected!");
+  // });
+    if (err) {
+      console.error('Failed to connect to db on startup - retrying in 1 sec', err);
+      setTimeout(connectWithRetry, 1000);
+    }
+      console.log("Connected!");
+
+    global.conn = conn;
   });
-  global.conn = conn;
+};
+connectWithRetry();
   //routes
   app.use('/auth',authRoutes)
   app.use('/members', memberRoutes);
